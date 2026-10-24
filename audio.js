@@ -102,12 +102,12 @@
     if (!A.ctx || A.muted) return;
     const t = now(); k = k == null ? 1 : k;
     switch (name) {
-      case 'ohh': crowdVoices(6, 170, [450, 950, 600], 0.9, 0.9 * k); break;
+      case 'ohh': crowdVoices(6, 170, [450, 950, 600], 0.9, 0.9 * k, sfx); break;
       case 'cheer':
         nz(t, 1.0, 0.25 * k, 'bandpass', 2400, 0.7, sfx);
         osc('sine', 1700, t + 0.05, 0.16, 0.18, sfx, 2600); osc('sine', 2500, t + 0.24, 0.2, 0.18, sfx, 1700);
-        crowdVoices(5, 220, [700, 1100, 800], 0.8, 0.6 * k); break;
-      case 'meh': crowdVoices(4, 140, [500, 380, 300], 0.7, 0.5); break;
+        crowdVoices(5, 220, [700, 1100, 800], 0.8, 0.6 * k, sfx); break;
+      case 'meh': crowdVoices(4, 140, [500, 380, 300], 0.7, 0.5, sfx); break;
       case 'laugh': [520, 470, 430, 400].forEach((f, i) => osc('square', f, t + i * 0.1, 0.06, 0.15, sfx)); break;
       case 'shutter': nz(t, 0.03, 0.35, 'highpass', 3000, 1, sfx); nz(t + 0.07, 0.03, 0.3, 'highpass', 3000, 1, sfx); break;
       case 'blip': osc('square', 880, t, 0.05, 0.1, sfx); break;
@@ -118,4 +118,9 @@
   };
 
   root.Sound = A;
+  if (typeof window !== 'undefined') {
+    window.sfx = function (name, k) { A.sfx(name, k); };
+    window.startAudio = function () { A.start(); };
+    window.toggleMute = function () { return A.toggleMute(); };
+  }
 })(this);
